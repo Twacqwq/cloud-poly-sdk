@@ -1,7 +1,20 @@
 package cloudpolysdk
 
-import "github.com/twacqwq/cloud-poly-sdk/pkg/store"
+type PolyCore struct {
+	Stores *Store
+}
 
-type CloudPoly struct {
-	*store.Store
+func New(option ...Option) (*PolyCore, error) {
+	cloudPoly := &PolyCore{
+		Stores: &Store{},
+	}
+
+	for _, opt := range option {
+		opt(cloudPoly.Stores)
+		if cloudPoly.Stores.Err != nil {
+			return nil, cloudPoly.Stores.Err
+		}
+	}
+
+	return cloudPoly, nil
 }
